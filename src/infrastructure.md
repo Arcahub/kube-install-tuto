@@ -23,6 +23,8 @@ To connect to the instances follow the instructions in the [last section of this
 
 ## Step by step
 
+// TODO
+
 ## Connection to the instances
 
 To connect to the instances we will use the public gateway that is configured with a ssh bastion.
