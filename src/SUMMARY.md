@@ -1,0 +1,16 @@
+# Summary
+
+- [Introduction](./introduction.md)
+- [Infrastructure Provisionning](./infrastructure.md)
+- [Understanding Kubernetes Components](./k8s-components.md)
+- [Kubernetes installation with kubeadm](./installation/installation.md)
+  - [Setting up control plane node](./installation/controlplane-node.md)
+  - [Setting up worker node](./installation/worker-node.md)
+- [Undertstanding what we have done](./understanding.md)
+  - [Daemon services](./understandind/daemon-services.md)
+  - [Static pods](./understanding/static-pods.md)
+  - [Certificates](./understanding/certificates.md)
+- [Upgrading cluster version](./version-upgrade.md)
+- [Create a user for a developper](./create-user.md)
+- [External access && Ingress](./external-access.md)
+- [Bonus](./bonus.md)
