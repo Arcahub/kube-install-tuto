@@ -1,8 +1,8 @@
 # Summary
 
 - [Introduction](./introduction.md)
-- [Infrastructure Provisionning](./infrastructure.md)
 - [Understanding Kubernetes Components](./k8s-components.md)
+- [Infrastructure Provisionning](./infrastructure.md)
 - [Kubernetes installation with kubeadm](./installation/installation.md)
   - [Setting up control plane node](./installation/controlplane-node.md)
   - [Setting up worker node](./installation/worker-node.md)
