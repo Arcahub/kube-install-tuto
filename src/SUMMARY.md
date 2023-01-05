@@ -7,7 +7,7 @@
   - [Setting up control plane node](./installation/controlplane-node.md)
   - [Setting up worker node](./installation/worker-node.md)
 - [Undertstanding what we have done](./understanding.md)
-  - [Daemon services](./understandind/daemon-services.md)
+  - [Daemon services](./understanding/daemon-services.md)
   - [Static pods](./understanding/static-pods.md)
   - [Certificates](./understanding/certificates.md)
 - [Upgrading cluster version](./version-upgrade.md)
