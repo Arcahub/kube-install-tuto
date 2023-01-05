@@ -10,6 +10,6 @@
   - [Static pods](./understanding/static-pods.md)
   - [Certificates](./understanding/certificates.md)
 - [Upgrading cluster version](./version-upgrade.md)
-- [Create a user for a developper](./create-user.md)
+- [Create a config for a developper](./create-config.md)
 - [External access && Ingress](./external-access.md)
 - [Bonus](./bonus.md)
