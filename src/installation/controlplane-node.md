@@ -25,9 +25,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ## Check that control plane is up
 
 We now have a control plane node up and running. To check that everything is working you can run the following command:
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 ```bash
 kubectl get nodes
 ```
