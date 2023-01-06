@@ -111,6 +111,24 @@ This command will flatten the kubeconfig file. The flattened kubeconfig file wil
 
 Then you will need to give the `employee.kubeconfig` file to the developper. The developper will then be able to use the kubeconfig file to access the cluster.
 
+## Test the kubeconfig file
+
+To test the kubeconfig file, you can use it with the `kubectl` command. You will need to run the following command :
+
+```bash
+kubectl get pods --kubeconfig=employee.kubeconfig
+```
+
+This command should return the following error :
+
+```bash
+Error from server (Forbidden): pods is forbidden: User "employee" cannot list resource "pods" in API group "" in the namespace "default"
+```
+
+This error means that the developper is not authorized to list pods in the default namespace. This is normal because we have not given the developper any permissions. We will see how to give the developper some permissions in the next section.
+
+But you can see that we have successfully authenticated against the API server. This means that the kubeconfig file is working.
+
 ## Add permissions to the developper
 
 The developper will be able to access the cluster but he will not be able to do anything. The developper will not have any permissions. You will need to give the developper some permissions.
@@ -133,13 +151,21 @@ kubectl create rolebinding developer --role=developer --user=employee --namespac
 
 This command will create a role binding named `developer`. The role binding will bind the role `developer` to the developper `employee` in the default namespace.
 
-To give the role binding to the developper, you will need to run the following command :
+## Test the permissions
+
+To test the permissions, you can use the kubeconfig file with the `kubectl` command. You will need to run the following command :
 
 ```bash
-kubectl create clusterrolebinding developer --clusterrole=developer --user=employee
+kubectl get pods --kubeconfig=employee.kubeconfig
 ```
 
-This command will create a cluster role binding named `developer`. The cluster role binding will bind the role `developer` to the developper `employee` in all namespaces.
+This command should return the following output :
+
+```bash
+No resources found in default namespace.
+```
+
+This output means that the developper is authorized to list pods in the default namespace.
 
 ## Conclusion
 
