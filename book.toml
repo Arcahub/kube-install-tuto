@@ -1,5 +1,7 @@
 [book]
-authors = []
+title = "How to deploy a Kubernetes cluster"
+description = "A guide to deploy a Kubernetes cluster for a course at Ynov School"
+authors = ["Guillaume Mailhol"]
 language = "en"
 multilingual = false
 src = "src"
