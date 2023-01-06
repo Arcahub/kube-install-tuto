@@ -9,6 +9,7 @@
 - [Undertstanding what we have done](./understanding.md)
   - [Static pods](./understanding/static-pods.md)
   - [Certificates](./understanding/certificates.md)
+- [Creating our first deployment](./first-deployment.md)
 - [Upgrading cluster version](./version-upgrade.md)
 - [Create a config for a developper](./create-config.md)
 - [External access && Ingress](./external-access.md)
