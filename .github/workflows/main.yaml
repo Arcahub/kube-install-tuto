@@ -1,0 +1,31 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  pages:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Install mdbook
+      run: |
+        mkdir bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.25/mdbook-v0.4.25-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        bin/mdbook build
+    - name: Deploy to GitHub
+      env:
+        GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
+      run: |
+        git worktree add /tmp/gh-pages
+        mdbook build
+        rm -rf /tmp/book/* # this won't delete the .git directory
+        cp -rp book/* /tmp/book/
+        cd /tmp/book
+        git update-ref -d refs/heads/gh-pages
+        git add -A
+        git commit -m 'deploy new book'
+        git push origin gh-pages --force
+        cd -
