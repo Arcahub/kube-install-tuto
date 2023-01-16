@@ -1,8 +1,8 @@
 # Static pods
 
-We just installed our Kubernetes cluster, and we can already saw some pods running in the `kube-system` namespace. But where did these pods come from ? How did they get created ? How did they get scheduled on the nodes ?
+We just installed our Kubernetes cluster, and we can already see some pods running in the `kube-system` namespace. But where did these pods come from ? How did they get created ? How did they get scheduled on the nodes ?
 
-Those pods are called static pods. Static pods are pods that are managed directly by the kubelet daemon.
+These pods are called static pods. Static pods are pods that are managed directly by the kubelet daemon.
 
 ## What are static pods ?
 
@@ -25,7 +25,7 @@ kube-controller-manager.yaml
 kube-scheduler.yaml
 ```
 
-You can check that those files match the pods that are running in the `kube-system` namespace :
+You can check that these files match the pods that are running in the `kube-system` namespace :
 
 ```bash
 kubectl get pods --namespace=kube-system
@@ -112,4 +112,4 @@ sudo rm /etc/kubernetes/manifests/nginx.yaml
 
 ## Conclusion
 
-In this article, we saw how static pods work and where are located Kubernetes components manifests. Static pod are never used for anything else than managing those components, but you may have to modify their manifest.
+In this article, we saw how static pods work and where are located Kubernetes components manifests. Static pod are never used for anything else than managing these components, but you may have to modify their manifest.

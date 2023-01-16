@@ -75,7 +75,7 @@ The worker nodes are the machines that run applications. The worker nodes consis
 
 ### kubelet
 
-The kubelet is the primary "node agent" that runs on each node. The kubelet takes a set of PodSpecs that are provided through various mechanisms and ensures that the containers described in those PodSpecs are running and healthy. The kubelet doesn't manage containers which were not created by Kubernetes.
+The kubelet is the primary "node agent" that runs on each node. The kubelet takes a set of PodSpecs that are provided through various mechanisms and ensures that the containers described in the PodSpecs are running and healthy. The kubelet doesn't manage containers which were not created by Kubernetes.
 
 ### kube-proxy
 
