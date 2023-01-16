@@ -1,12 +1,12 @@
 # Static pods
 
-We just installed our Kubernetes cluster and we can already saw some pods running in the `kube-system` namespace. But where did these pods come from ? How did they get created ? How did they get scheduled on the nodes ?
+We just installed our Kubernetes cluster, and we can already saw some pods running in the `kube-system` namespace. But where did these pods come from ? How did they get created ? How did they get scheduled on the nodes ?
 
 Those pods are called static pods. Static pods are pods that are managed directly by the kubelet daemon.
 
 ## What are static pods ?
 
-As we said earlier, static pods are pods that are managed directly by the `kubelet` daemon. `kubelet` will watch a specific directory on the host filesystem. If a file is created in this directory, `kubelet` will try to create a pod based on the file. If the file is deleted, `kubelet` will delete the pod.
+As we said earlier, static pods are pods that are managed directly by the `kubelet` daemon. `kubelet` will watch a specific directory on the host file system. If a file is created in this directory, `kubelet` will try to create a pod based on the file. If the file is deleted, `kubelet` will delete the pod.
 
 The directory that `kubelet` is watching is called the **static pod directory**. The default static pod directory is `/etc/kubernetes/manifests`.
 
@@ -112,4 +112,4 @@ sudo rm /etc/kubernetes/manifests/nginx.yaml
 
 ## Conclusion
 
-In this article, we saw how static pods work and where are located Kubernetes components manifests. Static pod are never used for anything else than managing those components but you may have to modify their manifest.
+In this article, we saw how static pods work and where are located Kubernetes components manifests. Static pod are never used for anything else than managing those components, but you may have to modify their manifest.

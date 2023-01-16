@@ -30,8 +30,12 @@ controlplane   Ready    control-plane,master   10m   v1.26.0
 workernode     Ready    <none>                 10m   v1.26.0
 ```
 
-We can add a label to the worker node to make it a worker node.
+We can add a label to add the worker role to the node.
 
 ```bash
 kubectl label node <node-name> node-role.kubernetes.io/worker=worker
 ```
+
+## What about the CNI ?
+
+For the installation of the control plane node we needed to install a CNI plugin for the node to be ready, but for the worker node we didn't. Can you explain why ?

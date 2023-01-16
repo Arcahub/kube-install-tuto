@@ -8,11 +8,23 @@ sudo kubeadm init
 
 Wait for it to finish.
 
+## What does kubeadm init do?
+
+The `kubeadm init` command does a lot of things:
+
+- Install the necessary packages on the system
+- Create a Kubernetes configuration file
+- Create static pods for the control plane components
+- Generate certificates and keys for the cluster
+- Generate a kubeconfig for the control plane components
+- Generate a token to be used by the worker nodes to join the cluster
+- Generate a kubeconfig for the admin user
+
 ## Setup kubeconfig
 
 To be able to use kubectl we need to setup the kubeconfig file.
 This configuration file is created by kubeadm and is located at `/etc/kubernetes/admin.conf`.
-This enable us to interact with our Kubernetes cluster currently with only one node as the admin user.
+This enables us to interact with our Kubernetes cluster, currently with only one node as the admin user.
 
 Run the following commands to copy the configuration file to the default location and change the ownership of the file to the current user:
 
@@ -24,7 +36,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ## Check that control plane is up
 
-We now have a control plane node up and running. To check that everything is working you can run the following command:
+We now have a control plane node up and running. To check that everything is working, you can run the following command:
 
 ```bash
 kubectl get nodes
@@ -64,7 +76,7 @@ kube-system   kube-scheduler-controlplane                1/1     Running   0    
 
 You can see that the `coredns` pods are not ready and are in the `Pending` state. This is because the pods are waiting for a network to be available.
 
-To fix this we need to install a [Container Network Interface (CNI) plugin](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/). A CNI plugin is a network plugin that will allow pods to communicate with each other.
+To fix this, we need to install a [Container Network Interface (CNI) plugin](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/). A CNI plugin is a network plugin that will allow pods to communicate with each other.
 
 We will use [Weave Net](https://www.weave.works/oss/net/) in this course.
 
@@ -116,4 +128,4 @@ kube-system   kube-scheduler-controlplane                1/1     Running   0    
 
 ## Join worker nodes
 
-In the next section we will make our worker nodes join the cluster.
+In the next section, we will make our worker nodes join the cluster.

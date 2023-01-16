@@ -1,6 +1,6 @@
 # Kubernetes installation with kubeadm
 
-In this section we will install a Kubernetes cluster using [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/).
+In this section, we will install a Kubernetes cluster using [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/).
 
 The following steps are expected to be run on all nodes in the cluster. So first follow ***all*** the steps on the control plane node and then repeat the steps on all worker nodes.
 
@@ -8,7 +8,7 @@ So first ssh on the control plane node and then follow the steps.
 
 ## Prepare the node
 
-Before installing Kubernetes components we need to prepare the node by enabling the required kernel network modules.
+Before installing Kubernetes components, we need to prepare the node by enabling the required kernel network modules.
 
 ```bash
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
@@ -34,7 +34,7 @@ sudo sysctl --system
 
 ## CRI (Container Runtime Interface)
 
-Kubernetes need a container runtime to run containers. Kubernetes define an interface called the Container Runtime Interface (CRI). The CRI is an interface which allows Kubernetes to use a wide variety of container runtimes, without the need to recompile Kubernetes.
+Kubernetes need a container runtime to run containers. Kubernetes defines an interface called the Container Runtime Interface (CRI). The CRI is an interface which allows Kubernetes to use a wide variety of container runtimes, without the need to recompile Kubernetes.
 
 Kubernetes support multiple CRI implementations, in this course we will use [containerd](https://containerd.io/) that is the default CRI for Kubernetes.
 
@@ -68,7 +68,7 @@ sudo containerd config default > /etc/containerd/config.toml
 
 Find the section `[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]` in the `/etc/containerd/config.toml` file and change the `SystemdCgroup` value to `true`.
 
-Finally you can restart the containerd service.
+Finally, you can restart the containerd service.
 
 ```bash
 sudo systemctl restart containerd
@@ -86,7 +86,7 @@ sudo ctr run --rm docker.io/library/hello-world:latest hello-world
 ctr images rm docker.io/library/hello-world:latest
 ```
 
-If you see the following output then the installation is successful.
+If you see the following output, then the installation is successful.
 
 ```bash
 Hello from Docker!

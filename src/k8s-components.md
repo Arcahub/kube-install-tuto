@@ -1,6 +1,6 @@
 # Understanding Kubernetes Components
 
-Before starting any work let's review how Kubernetes is designed and what are the components that compose it.
+Before starting any work, let's review how Kubernetes is designed and what are the components that compose it.
 
 ## Kubernetes Architecture
 
@@ -79,7 +79,7 @@ The kubelet is the primary "node agent" that runs on each node. The kubelet take
 
 ### kube-proxy
 
-The kube-proxy is responsible for network proxying. The kube-proxy maintains network rules on the nodes. These network rules allow network communication to your Pods from network sessions inside or outside of your cluster. The kube-proxy uses the operating system packet filtering layer if there is one and it's available. Otherwise, kube-proxy forwards the traffic itself. The kube-proxy is responsible for:
+The kube-proxy is responsible for network proxying. The kube-proxy maintains network rules on the nodes. These network rules allow network communication to your Pods from network sessions inside or outside your cluster. The kube-proxy uses the operating system packet filtering layer if there is one available. Otherwise, kube-proxy forwards the traffic itself. The kube-proxy is responsible for:
 
 - Load balancing connections across the different Pods
 - Maintaining network rules on the nodes
