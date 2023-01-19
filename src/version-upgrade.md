@@ -6,13 +6,7 @@ I voluntarily made you install Kubernetes 1.25.0. This is because I wanted to sh
 
 To upgrade the control plane, we will use the `kubeadm upgrade` command. This command will upgrade the control plane components and the kubelet.
 
-Before upgrading the node, we need to drain the control plane node.
-
-```bash
-kubectl drain controlplane --ignore-daemonsets
-```
-
-Than we will first upgrade `kubeadm` itself.
+We will first upgrade `kubeadm` itself.
 
 ```bash
 sudo apt-mark unhold kubeadm && \
@@ -72,6 +66,12 @@ If the upgrade is successful, you should see the following output.
 [upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets if you haven't already done so.
 ```
 
+Before upgrading `kubelet`, we need to drain the control plane node.
+
+```bash
+kubectl drain <controlplane-node-name> --ignore-daemonsets
+```
+
 You can now upgrade `kubelet`
 
 ```bash
@@ -95,7 +95,54 @@ kubectl uncordon controlplane
 
 ## Upgrade worker nodes
 
-To upgrade the worker nodes you can follow the same steps as for the control plane node.
+To upgrade the worker nodes the steps are similar to the control plane.
+
+First upgrade `kubeadm`
+
+```bash
+sudo apt-mark unhold kubeadm && \
+sudo apt update && apt install -y kubeadm=1.26.0-00 && \
+sudo apt-mark hold kubeadm
+```
+
+Then upgrade the node
+
+```bash
+kubeadm upgrade node
+```
+
+If the upgrade is successful, you should see the following output.
+
+```bash
+[upgrade/successful] SUCCESS! Your node was upgraded to "v1.26.x". Enjoy!
+```
+
+Before upgrading `kubelet`, we need to drain the worker node, so go on the controlplane and run:
+
+```bash
+kubectl drain <worker-node-name> --ignore-daemonsets
+```
+
+You can now upgrade `kubelet`
+
+```bash
+sudo apt-mark unhold kubelet && \
+sudo apt update && apt install -y kubelet=1.26.0-00 && \
+sudo apt-mark hold kubelet
+```
+
+Restart `kubelet`
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+```
+
+Uncordon the worker node
+
+```bash
+kubectl uncordon <worker-node-name>
+```
 
 ## Check that cluster is up
 
@@ -110,6 +157,6 @@ You should see something like this:
 ```bash
 NAME            STATUS   ROLES                  AGE   VERSION
 controlplane    Ready    control-plane,master   10m   v1.26.0
-workernode      Ready    <none>                 10m   v1.26.0
-workernode2     Ready    <none>                 10m   v1.26.0
+workernode      Ready    worker                 10m   v1.26.0
+workernode2     Ready    worker                 10m   v1.26.0
 ```

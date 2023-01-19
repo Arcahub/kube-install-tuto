@@ -109,9 +109,9 @@ EOF
 # Update package manager index
 sudo apt-get update
 # Install kubeadm, kubelet and kubectl with the exact same version or else components could be incompatible
-sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-get install -y kubelet=1.25.0-00 kubeadm=1.25.0-00 kubectl=1.25.0-00
 # Hold the version of the packages
-sudo apt-mark hold kubelet=1.25.0-00 kubeadm=1.25.0-00 kubectl=1.25.0-00
+sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
 The last line is very important because we don't want the Kubernetes components to be updated automatically by the package manager when running `apt-get upgrade`.

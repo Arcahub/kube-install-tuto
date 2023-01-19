@@ -41,10 +41,10 @@ sudo cat /etc/kubernetes/manifests/kube-apiserver.yaml
 
 Let's play a bit with static pods to understand how they work.
 
-Let's try to destroy the `kube-apiserver` pod only with `kubectl` :
+Let's try to destroy the `kube-apiserver` pod only with `kubectl`. To do that you will need to identify the name of the pod:
 
 ```bash
-kubectl delete pod kube-apiserver --namespace=kube-system
+kubectl delete pod <kube-apiserver-pod-name> --namespace=kube-system
 ```
 
 But if you check the pods again, you will see that the `kube-apiserver` pod is still running :
@@ -62,7 +62,7 @@ Let's try to delete the `kube-apiserver` pod file :
 sudo mv /etc/kubernetes/manifests/kube-apiserver.yaml ~/kube-apiserver.yaml
 ```
 
-And now, the `kube-apiserver` pod is gone :
+Now the `kube-apiserver` is gone and how can we test that ? Try to run any kubectl command and you will endup with an error since kubectl can't contact the API server.
 
 ```bash
 kubectl get pods --namespace=kube-system
@@ -87,21 +87,21 @@ sudo tee /etc/kubernetes/manifests/nginx.yaml <<EOF
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx
-  namespace: kube-system
+  name: nginx-test
+  namespace: default
 spec:
-    containers:
-    - name: nginx
-        image: nginx
-        ports:
-        - containerPort: 80
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
 EOF
 ```
 
 And now, the `nginx` pod is running :
 
 ```bash
-kubectl get pods --namespace=kube-system
+kubectl get pods --namespace=default
 ```
 
 Let's clean up :

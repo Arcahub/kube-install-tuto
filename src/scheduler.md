@@ -16,10 +16,16 @@ You can check that the scheduler is not running anymore:
 kubectl get pods -n kube-system
 ```
 
-Now let's try to create a pod like we would normally do:
+Now let's try to create a pod, we will first create the manifest to be able to modify it later:
 
 ```bash
-kubectl run nginx --image=nginx
+kubectl run nginx --image=nginx --dry-run=client -o yaml > ~/nginx.yaml
+```
+
+And then create it:
+
+```bash
+kubectl apply -f ~/nginx.yaml
 ```
 
 The pod is created but is stuck in `Pending` state:
@@ -28,28 +34,29 @@ The pod is created but is stuck in `Pending` state:
 kubectl get pods
 ```
 
-Let's check the pod description:
-
-```bash
-kubectl describe pod nginx
-```
-
 We can see that the pod is waiting for a node to be assigned:
 
 ```bash
-// TODO
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   0/1     Pending   0          42s
 ```
 
-Now let's try to schedule the pod manually by updating the pod spec:
+Now let's deploy a second pod, first edit the manifest file, change the name of the pod, add a `nodeName` field with the name of a worker node as value and finally apply it:
 
 ```bash
-kubectl patch pod nginx -p '{"spec":{"nodeName":"<worker-node-name>"}}'
+kubectl apply -f ~/nginx.yaml
 ```
 
-The pod should be running now:
+The second pod will run without a problem while the other is still in pending state:
 
 ```bash
 kubectl get pods
+```
+
+```bash
+NAME     READY   STATUS    RESTARTS   AGE
+nginx    0/1     Pending   0          14m
+nginx2   1/1     Running   0          3m51s
 ```
 
 Let's restore the scheduler:
@@ -58,7 +65,25 @@ Let's restore the scheduler:
 sudo mv /tmp/kube-scheduler.yaml /etc/kubernetes/manifests
 ```
 
+And now the first pod while be scheduled:
+
+```bash
+kubectl get pods
+```
+
+```bash
+NAME     READY   STATUS    RESTARTS   AGE
+nginx    1/1     Running   0          15m
+nginx2   1/1     Running   0          4m52s
+```
+
 We just proved that scheduling a pod is not magic, it only mean to set the `nodeName` field in the pod spec to assign the pod to a node. Of course the scheduler does not randomly choose a node, it has a logic to choose the best node for the pod and that's why it's an important component of the cluster.
+
+Cleanup:
+
+```bash
+kubectl delete pod nginx nginx2
+```
 
 ## Node affinity
 

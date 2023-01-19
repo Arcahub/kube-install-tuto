@@ -72,7 +72,7 @@ This command will create the certificate of the developper. The certificate will
 Then you will need to run the following command :
 
 ```bash
-kubectl config set-cluster kubernetes --certificate-authority=/etc/kubernetes/pki/ca.crt --embed-certs=true --server=https://KUBERNETES_ADDRESS:6443 --kubeconfig=employee.kubeconfig
+kubectl config set-cluster kubernetes --certificate-authority=/etc/kubernetes/pki/ca.crt --embed-certs=true --server=https://KUBERNETES_ADDRESS:6443 --kubeconfig=/tmp/employee.kubeconfig
 ```
 
 This command will create a cluster entry in the kubeconfig file. The cluster entry will contain the address of the cluster. The address of the cluster will be used to access the cluster.
@@ -80,7 +80,7 @@ This command will create a cluster entry in the kubeconfig file. The cluster ent
 Then you will need to run the following command :
 
 ```bash
-kubectl config set-credentials employee --client-certificate=employee.crt --client-key=employee.key --embed-certs=true --kubeconfig=employee.kubeconfig
+kubectl config set-credentials employee --client-certificate=employee.crt --client-key=employee.key --embed-certs=true --kubeconfig=/tmp/employee.kubeconfig
 ```
 
 This command will create a user entry in the kubeconfig file. The user entry will contain the certificate of the developper. The certificate of the developper will be used to authenticate the developper to the cluster.
@@ -88,7 +88,7 @@ This command will create a user entry in the kubeconfig file. The user entry wil
 Then you will need to run the following command :
 
 ```bash
-kubectl config set-context employee --cluster=kubernetes --user=employee --kubeconfig=employee.kubeconfig
+kubectl config set-context employee --cluster=kubernetes --user=employee --kubeconfig=/tmp/employee.kubeconfig
 ```
 
 This command will create a context entry in the kubeconfig file. The context entry will contain the name of the developper. The name of the developper will be used to create a context for the developper.
@@ -96,7 +96,7 @@ This command will create a context entry in the kubeconfig file. The context ent
 Then you will need to run the following command :
 
 ```bash
-kubectl config use-context employee --kubeconfig=employee.kubeconfig
+kubectl config use-context employee --kubeconfig=/tmp/employee.kubeconfig
 ```
 
 This command will set the current context of the kubeconfig file to the context of the developper.
@@ -104,7 +104,7 @@ This command will set the current context of the kubeconfig file to the context 
 Then you will need to run the following command :
 
 ```bash
-kubectl config view --flatten --minify --kubeconfig=employee.kubeconfig > employee.kubeconfig
+kubectl config view --flatten --minify --kubeconfig=/tmp/employee.kubeconfig > ~/employee.kubeconfig
 ```
 
 This command will flatten the kubeconfig file. The flattened kubeconfig file will be easier to read.
