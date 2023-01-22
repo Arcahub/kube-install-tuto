@@ -26,8 +26,8 @@ You should see something like this:
 
 ```bash
 NAME           STATUS   ROLES                  AGE   VERSION
-controlplane   Ready    control-plane,master   10m   v1.26.0
-workernode     Ready    <none>                 10m   v1.26.0
+controlplane   Ready    control-plane,master   10m   v1.25.0
+workernode     Ready    <none>                 10m   v1.25.0
 ```
 
 We can add a label to add the worker role to the node.

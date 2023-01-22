@@ -46,7 +46,7 @@ You should see something like this:
 
 ```bash
 NAME           STATUS      ROLES           AGE   VERSION
-controlplane   NotReady    control-plane   10m   v1.26.0
+controlplane   NotReady    control-plane   10m   v1.25.0
 ```
 
 The control plane node should be in the `NotReady` state yet. This is normal, we will fix this in the next section.
@@ -103,7 +103,7 @@ You should see something like this:
 
 ```bash
 NAME           STATUS   ROLES    AGE   VERSION
-controlplane   Ready    master   10m   v1.26.0
+controlplane   Ready    master   10m   v1.25.0
 ```
 
 The control plane node should be in the `Ready` state now.
