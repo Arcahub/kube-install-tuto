@@ -9,7 +9,7 @@
   - [Installation conclusion](./installation/conclusion.md)
 - [Understanding what we have done](./understanding.md)
   - [Static pods](./understanding/static-pods.md)
-  - [Certificates (advanced)](./understanding/certificates.md)
+  - [Certificates](./understanding/certificates.md)
 - [Creating our first deployment (advanced)](./first-deployment.md)
 - [Playing with the scheduler](./scheduler.md)
 - [Upgrading cluster version](./version-upgrade.md)
