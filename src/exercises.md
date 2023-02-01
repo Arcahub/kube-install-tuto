@@ -46,3 +46,9 @@ unset HISTFILE
 - notes/klustered/episode-19/borkod/README.md
 - notes/klustered/episode-23/Marcus/README.md
 - notes/klustered/episode-30/CrashBeerBackOff/README.md
+
+
+## Implemented
+
+- 01 - Kubelet has wrong bin path
+- 02 - Drain a node and let it unschedulable
