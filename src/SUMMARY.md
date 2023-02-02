@@ -14,5 +14,4 @@
 - [Playing with the scheduler](./scheduler.md)
 - [Upgrading cluster version](./version-upgrade.md)
 - [Create a config for a developer (advanced)](./create-config.md)
-- [External access && Ingress](./external-access.md)
 - [Bonus](./bonus.md)

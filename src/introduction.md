@@ -13,7 +13,6 @@ This course is divided into the following sections:
 - [Understanding what we have done](understanding.md): Understanding what we have done
 - [Upgrading cluster version](version-upgrade.md): How to upgrade Kubernetes cluster version
 - [Create a user for a developer](create-user.md): How to create a user for a developer
-- [External access && Ingress](external-access.md): How to access Kubernetes cluster from outside
 - [Bonus](bonus.md): Bonus
 
 ## Prerequisites
