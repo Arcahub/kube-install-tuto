@@ -14,8 +14,10 @@ With the Scaleway CLI setup, you can then run the following command from the roo
     cd terraform
     terraform init
     terraform plan
-    terraform apply
+    terraform apply -var="project_name=<your project name>" -var="project_id=<your project id>"
 ```
+
+You must provide the Scaleway project id and a custom project name.
 
 Terraform will ask you to validate the creation of the infrastructure, press `yes` and wait for the infrastructure to be created.
 

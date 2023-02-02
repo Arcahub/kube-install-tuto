@@ -1,11 +1,17 @@
 variable "project_id" {
   type    = string
-  default = "eb3c5f4c-a3ef-47ce-8eb9-b449585479fe"
+  default = "2548c189-3774-46a1-8a18-e0ef516d5893"
+}
+
+variable "project_name" {
+  type = string
+  default = "k8s"
 }
 
 module "k8s" {
   source = "./modules/k8s"
 
+  project_name = var.project_name
   project_id = var.project_id
   zone       = "fr-par-1"
   region     = "fr-par"
