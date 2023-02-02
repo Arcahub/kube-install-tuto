@@ -85,9 +85,55 @@ Cleanup:
 kubectl delete pod nginx nginx2
 ```
 
-## Node affinity
+## Node selector
 
-Another way to schedule a pod on a specific node is to use node affinity. A node affinity is a rule that can be applied to a pod. If a node match the rule, the scheduler will schedule the pod on that node unless the pod has a node affinity that does not match that rule.
+Another way to schedule a pod on a specific node is to use a node selector. A node selector is a label that can be applied to a pod. If a node has a label that match the node selector, the scheduler will schedule the pod on that node.
+
+Let's see how it works. First we will add a label to a node:
+
+```bash
+kubectl label node k8s-node-1 node-type=worker
+```
+
+Now let's create a pod with a node selector:
+
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  nodeSelector:
+    node-type: worker
+EOF
+```
+
+The pod is successfully created and running:
+
+```bash
+kubectl get pods -o wide
+```
+
+```bash
+NAME      READY   STATUS    RESTARTS   AGE   IP           NODE
+nginx     1/1     Running   0          2m    1.1.1.1      k8s-node-1
+```
+
+Cleanup:
+
+```bash
+kubectl delete pod nginx
+```
+
+## Affinity and anti-affinity
+
+Affinity and anti-affinity is a more advanced way to schedule a pod on a specific node. It allows to specify more complex rules to match a node. You can also specify if a rule is required or preferred that means that if the rule is not matched, the pod can still be scheduled on a node that doesn't match the rule.
+
+You can also constrain scheduling based on labels on other pods running on the node rather than on labels on the node itself. This is called inter-pod affinity and anti-affinity.
 
 ## Taints and tolerations
 
@@ -118,5 +164,62 @@ spec:
     - key: node-role.kubernetes.io/control-plane
       operator: Equal
       value: ""
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ""
 EOF
 ```
+
+The pod is successfully created and running:
+
+```bash
+kubectl get pods
+```
+
+```bash
+NAME      READY   STATUS    RESTARTS   AGE
+nginx     1/1     Running   0          2m
+```
+
+Cleanup:
+
+```bash
+kubectl delete pod nginx
+```
+
+If we try to run the pod on the control plane node without the toleration, the pod will be stuck in `Pending` state:
+
+```bash
+cat<<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+    containers:
+    - name: nginx
+      image: nginx
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ""
+EOF
+```
+
+```bash
+kubectl get pods
+```
+
+```bash
+NAME      READY   STATUS    RESTARTS   AGE
+nginx     0/1     Pending   0          2m
+```
+
+Cleanup:
+
+```bash
+kubectl delete pod nginx
+```
+
+## Pod topology spread constraints
+
+Pod topology spread constraints allow you to constrain the distribution of pods across your cluster among failure-domains such as regions, zones, nodes, and other user-defined topology domains. This can be used to achieve high availability as well as efficient resource utilization.
+
+To test this feature, create a deployment with 4 replicas that will act the same way as a daemonset. That means that there will one pod per node and since we have only 3 nodes, the last pod will be in pending state.
