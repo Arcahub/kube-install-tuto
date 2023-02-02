@@ -41,8 +41,8 @@ unset HISTFILE
 - notes/klustered/episode-7/philip-welz/README.md
 - notes/klustered/episode-9/billie-cleek/README.md
 - notes/klustered/episode-14/sid-palas/README.md
-- notes/klustered/episode-17/william-lightning/break.sh
-- notes/klustered/episode-18/santana/README.md
+- notes/klustered/episode-17/william-lightning/break.sh **(not tested)**
+- notes/klustered/episode-18/santana/README.md **adminsion webhook**
 - notes/klustered/episode-19/borkod/README.md
 - notes/klustered/episode-23/Marcus/README.md
 - notes/klustered/episode-30/CrashBeerBackOff/README.md
@@ -52,3 +52,14 @@ unset HISTFILE
 
 - 01 - Kubelet has wrong bin path
 - 02 - Drain a node and let it unschedulable
+- 03 - Invalidate apiserver certificate (not tested)
+- 04 - CoreDNS scale to 0
+- 05 - CoreDNS bad config
+- 06 - set `maxPods` to 3 and try to schedule 5 pods
+- 07 - Break etcd health check
+- 08 - Copy static pod manifest dir but remove the kube-api-server manifest
+- 09 - Network policy to block all pods in a namespace
+- 10 - Taint worker nodes
+- 11 - chmod break
+- 12 - Remove kube admin config
+- 13 - Disable deployment controller
