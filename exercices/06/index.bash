@@ -5,7 +5,7 @@
 unset HISTFILE
 
 # Add maxPods to the kubelet configuration
-echo "maxPods: 3" | sudo teee /var/lib/kubelet/config.yaml
+echo "maxPods: 10" >> /var/lib/kubelet/config.yaml
 
 # Restart the kubelet
 sudo systemctl daemon-reload
@@ -22,7 +22,7 @@ metadata:
   name: nginx
   namespace: exercise-06
 spec:
-    replicas: 5
+    replicas: 15
     selector:
         matchLabels:
         app: nginx
@@ -37,5 +37,4 @@ spec:
             image: nginx
             ports:
             - containerPort: 80
-
 EOF
