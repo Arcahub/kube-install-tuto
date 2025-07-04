@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Create a config for a developer (advanced) - How to deploy a Kubernetes cluster</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="A guide to deploy a Kubernetes cluster for a course at Ynov School">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="k8s-components.html"><strong aria-hidden="true">2.</strong> Understanding Kubernetes Components</a></li><li class="chapter-item expanded "><a href="infrastructure.html"><strong aria-hidden="true">3.</strong> Infrastructure Provisioning</a></li><li class="chapter-item expanded "><a href="installation/installation.html"><strong aria-hidden="true">4.</strong> Kubernetes installation with kubeadm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="installation/controlplane-node.html"><strong aria-hidden="true">4.1.</strong> Setting up control plane node</a></li><li class="chapter-item expanded "><a href="installation/worker-node.html"><strong aria-hidden="true">4.2.</strong> Setting up worker node</a></li><li class="chapter-item expanded "><a href="installation/conclusion.html"><strong aria-hidden="true">4.3.</strong> Installation conclusion</a></li></ol></li><li class="chapter-item expanded "><a href="understanding.html"><strong aria-hidden="true">5.</strong> Understanding what we have done</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="understanding/static-pods.html"><strong aria-hidden="true">5.1.</strong> Static pods</a></li><li class="chapter-item expanded "><a href="understanding/certificates.html"><strong aria-hidden="true">5.2.</strong> Certificates</a></li></ol></li><li class="chapter-item expanded "><a href="first-deployment.html"><strong aria-hidden="true">6.</strong> Creating our first deployment (advanced)</a></li><li class="chapter-item expanded "><a href="scheduler.html"><strong aria-hidden="true">7.</strong> Playing with the scheduler</a></li><li class="chapter-item expanded "><a href="version-upgrade.html"><strong aria-hidden="true">8.</strong> Upgrading cluster version</a></li><li class="chapter-item expanded "><a href="create-config.html" class="active"><strong aria-hidden="true">9.</strong> Create a config for a developer (advanced)</a></li><li class="chapter-item expanded "><a href="bonus.html"><strong aria-hidden="true">10.</strong> Bonus</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">How to deploy a Kubernetes cluster</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="create-a-config-for-a-developper"><a class="header" href="#create-a-config-for-a-developper">Create a config for a developper</a></h1>
+<p>As a Kubernetes cluster administrator, you will need to create config files for the developpers of your company. This will allow them to access the cluster and deploy their applications.</p>
+<p>The first step is to create a certificate for the developper. This certificate will be used to authenticate the developper to the cluster.</p>
+<p>The certificate will be signed by the cluster CA. As we previously saw, the cluster CA is the certificate authority that is used to sign the certificates of the cluster components. The cluster CA is created when the cluster is created.</p>
+<p>To create a certificate for a developper, you will need to create a certificate signing request (CSR). The CSR will be signed by the cluster CA. The CSR will contain the name of the developper. The name of the developper will be used to create a context for the developper.</p>
+<p>Once you have successfully created the certificate, you will need to create a kubeconfig file for the developper. The kubeconfig file will contain the certificate of the developper and the address of the cluster. The kubeconfig file will be used by the developper to access the cluster.</p>
+<p>Here is an example of a kubeconfig file for a developper named employee :</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    certificate-authority: CA_LOCATION/ca.crt
+    server: https://KUBERNETES_ADDRESS:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: employee
+  name: employee
+current-context: employee
+users:
+- name: employee
+  user:
+    client-certificate: DEVELOPER_CERTIFICATE_LOCATION/employee.crt
+    client-key: DEVELOPER_CERTIFICATE_LOCATION/employee.key
+</code></pre>
+<p>In the <code>client-certificate</code> and <code>client-key</code> fields, you will need to replace <code>DEVELOPER_CERTIFICATE_LOCATION</code> with the location of the certificate of the developper. You can also directly copy the content of the <code>employee.crt</code> and <code>employee.key</code> files in the <code>client-certificate</code> and <code>client-key</code> fields.</p>
+<p>Same things for the <code>certificate-authority</code> field. You will need to replace <code>CA_LOCATION</code> with the location of the cluster CA or you can also directly copy the content of the <code>ca.crt</code> file in the <code>certificate-authority</code> field.</p>
+<p>In the <code>server</code> field, you will need to replace <code>KUBERNETES_ADDRESS</code> with the address of the cluster.</p>
+<p>Once you have successfully created the kubeconfig file, you will need to give it to the developper. The developper will then be able to use the kubeconfig file to access the cluster.</p>
+<h2 id="concrete-example"><a class="header" href="#concrete-example">Concrete example</a></h2>
+<p>Let's say that you are the cluster administrator of a cluster named <code>kubernetes</code>. You will need to create a certificate for a developper named <code>employee</code>. You will then need to create a kubeconfig file for the developper. You will then need to give the kubeconfig file to the developper.</p>
+<p>To create the certificate, you will need to ssh into the control plane node. You will then need to run the following command :</p>
+<pre><code class="language-bash">openssl genrsa -out employee.key 2048
+</code></pre>
+<p>This command will create the private key of the developper. The private key will be used to sign the certificate signing request of the developper.</p>
+<p>Then you will need to run the following command :</p>
+<pre><code class="language-bash">openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=employee&quot;
+</code></pre>
+<p>This command will create the certificate signing request of the developper. The certificate signing request will be signed by the cluster CA. The certificate signing request will contain the name of the developper. The name of the developper will be used to create a context for the developper.</p>
+<p>Then you will need to run the following command :</p>
+<pre><code class="language-bash">openssl x509 -req -in employee.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out employee.crt -days 500
+</code></pre>
+<p>This command will create the certificate of the developper. The certificate will be signed by the cluster CA. The certificate will contain the name of the developper. The name of the developper will be used to create a context for the developper.</p>
+<p>Then you will need to run the following command :</p>
+<pre><code class="language-bash">kubectl config set-cluster kubernetes --certificate-authority=/etc/kubernetes/pki/ca.crt --embed-certs=true --server=https://KUBERNETES_ADDRESS:6443 --kubeconfig=/tmp/employee.kubeconfig
+</code></pre>
+<p>This command will create a cluster entry in the kubeconfig file. The cluster entry will contain the address of the cluster. The address of the cluster will be used to access the cluster.</p>
+<p>Then you will need to run the following command :</p>
+<pre><code class="language-bash">kubectl config set-credentials employee --client-certificate=employee.crt --client-key=employee.key --embed-certs=true --kubeconfig=/tmp/employee.kubeconfig
+</code></pre>
+<p>This command will create a user entry in the kubeconfig file. The user entry will contain the certificate of the developper. The certificate of the developper will be used to authenticate the developper to the cluster.</p>
+<p>Then you will need to run the following command :</p>
+<pre><code class="language-bash">kubectl config set-context employee --cluster=kubernetes --user=employee --kubeconfig=/tmp/employee.kubeconfig
+</code></pre>
+<p>This command will create a context entry in the kubeconfig file. The context entry will contain the name of the developper. The name of the developper will be used to create a context for the developper.</p>
+<p>Then you will need to run the following command :</p>
+<pre><code class="language-bash">kubectl config use-context employee --kubeconfig=/tmp/employee.kubeconfig
+</code></pre>
+<p>This command will set the current context of the kubeconfig file to the context of the developper.</p>
+<p>Then you will need to run the following command :</p>
+<pre><code class="language-bash">kubectl config view --flatten --minify --kubeconfig=/tmp/employee.kubeconfig &gt; ~/employee.kubeconfig
+</code></pre>
+<p>This command will flatten the kubeconfig file. The flattened kubeconfig file will be easier to read.</p>
+<p>Then you will need to give the <code>employee.kubeconfig</code> file to the developper. The developper will then be able to use the kubeconfig file to access the cluster.</p>
+<h2 id="test-the-kubeconfig-file"><a class="header" href="#test-the-kubeconfig-file">Test the kubeconfig file</a></h2>
+<p>To test the kubeconfig file, you can use it with the <code>kubectl</code> command. You will need to run the following command :</p>
+<pre><code class="language-bash">kubectl get pods --kubeconfig=employee.kubeconfig
+</code></pre>
+<p>This command should return the following error :</p>
+<pre><code class="language-bash">Error from server (Forbidden): pods is forbidden: User &quot;employee&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;default&quot;
+</code></pre>
+<p>This error means that the developper is not authorized to list pods in the default namespace. This is normal because we have not given the developper any permissions. We will see how to give the developper some permissions in the next section.</p>
+<p>But you can see that we have successfully authenticated against the API server. This means that the kubeconfig file is working.</p>
+<h2 id="add-permissions-to-the-developper"><a class="header" href="#add-permissions-to-the-developper">Add permissions to the developper</a></h2>
+<p>The developper will be able to access the cluster but he will not be able to do anything. The developper will not have any permissions. You will need to give the developper some permissions.</p>
+<p>To give the developper some permissions, you will need to create a role. You will then need to create a role binding. You will then need to give the role binding to the developper.</p>
+<p>To create the role, you will need to run the following command :</p>
+<pre><code class="language-bash">kubectl create role developer --verb=get,list,watch --resource=pods --namespace=default
+</code></pre>
+<p>This command will create a role named <code>developer</code>. The role will allow the developper to get, list and watch pods in the default namespace.</p>
+<p>To create the role binding, you will need to run the following command :</p>
+<pre><code class="language-bash">kubectl create rolebinding developer --role=developer --user=employee --namespace=default
+</code></pre>
+<p>This command will create a role binding named <code>developer</code>. The role binding will bind the role <code>developer</code> to the developper <code>employee</code> in the default namespace.</p>
+<h2 id="test-the-permissions"><a class="header" href="#test-the-permissions">Test the permissions</a></h2>
+<p>To test the permissions, you can use the kubeconfig file with the <code>kubectl</code> command. You will need to run the following command :</p>
+<pre><code class="language-bash">kubectl get pods --kubeconfig=employee.kubeconfig
+</code></pre>
+<p>This command should return the following output :</p>
+<pre><code class="language-bash">No resources found in default namespace.
+</code></pre>
+<p>This output means that the developper is authorized to list pods in the default namespace.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In this article, we have seen how to create a kubeconfig file for a developper. We have also seen how to give the developper some permissions.</p>
+<p>That was the last article, in the next one I will give you some bonus exercises you can do if you want to go further.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="version-upgrade.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="bonus.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="version-upgrade.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="bonus.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

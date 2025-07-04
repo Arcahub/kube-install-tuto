@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Setting up control plane node - How to deploy a Kubernetes cluster</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="A guide to deploy a Kubernetes cluster for a course at Ynov School">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../k8s-components.html"><strong aria-hidden="true">2.</strong> Understanding Kubernetes Components</a></li><li class="chapter-item expanded "><a href="../infrastructure.html"><strong aria-hidden="true">3.</strong> Infrastructure Provisioning</a></li><li class="chapter-item expanded "><a href="../installation/installation.html"><strong aria-hidden="true">4.</strong> Kubernetes installation with kubeadm</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installation/controlplane-node.html" class="active"><strong aria-hidden="true">4.1.</strong> Setting up control plane node</a></li><li class="chapter-item expanded "><a href="../installation/worker-node.html"><strong aria-hidden="true">4.2.</strong> Setting up worker node</a></li><li class="chapter-item expanded "><a href="../installation/conclusion.html"><strong aria-hidden="true">4.3.</strong> Installation conclusion</a></li></ol></li><li class="chapter-item expanded "><a href="../understanding.html"><strong aria-hidden="true">5.</strong> Understanding what we have done</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../understanding/static-pods.html"><strong aria-hidden="true">5.1.</strong> Static pods</a></li><li class="chapter-item expanded "><a href="../understanding/certificates.html"><strong aria-hidden="true">5.2.</strong> Certificates</a></li></ol></li><li class="chapter-item expanded "><a href="../first-deployment.html"><strong aria-hidden="true">6.</strong> Creating our first deployment (advanced)</a></li><li class="chapter-item expanded "><a href="../scheduler.html"><strong aria-hidden="true">7.</strong> Playing with the scheduler</a></li><li class="chapter-item expanded "><a href="../version-upgrade.html"><strong aria-hidden="true">8.</strong> Upgrading cluster version</a></li><li class="chapter-item expanded "><a href="../create-config.html"><strong aria-hidden="true">9.</strong> Create a config for a developer (advanced)</a></li><li class="chapter-item expanded "><a href="../bonus.html"><strong aria-hidden="true">10.</strong> Bonus</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">How to deploy a Kubernetes cluster</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="setting-up-control-plane-node"><a class="header" href="#setting-up-control-plane-node">Setting up control plane node</a></h1>
+<p>To init the control plane node with kubeadm simply ssh on the node and run the following command:</p>
+<pre><code class="language-bash">sudo kubeadm init
+</code></pre>
+<p>Wait for it to finish.</p>
+<h2 id="what-does-kubeadm-init-do"><a class="header" href="#what-does-kubeadm-init-do">What does kubeadm init do?</a></h2>
+<p>The <code>kubeadm init</code> command does a lot of things:</p>
+<ul>
+<li>Install the necessary packages on the system</li>
+<li>Create a Kubernetes configuration file</li>
+<li>Create static pods for the control plane components</li>
+<li>Generate certificates and keys for the cluster</li>
+<li>Generate a kubeconfig for the control plane components</li>
+<li>Generate a token to be used by the worker nodes to join the cluster</li>
+<li>Generate a kubeconfig for the admin user</li>
+</ul>
+<h2 id="setup-kubeconfig"><a class="header" href="#setup-kubeconfig">Setup kubeconfig</a></h2>
+<p>To be able to use kubectl we need to setup the kubeconfig file.
+This configuration file is created by kubeadm and is located at <code>/etc/kubernetes/admin.conf</code>.
+This enables us to interact with our Kubernetes cluster, currently with only one node as the admin user.</p>
+<p>Run the following commands to copy the configuration file to the default location and change the ownership of the file to the current user:</p>
+<pre><code class="language-bash">mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre>
+<h2 id="check-that-control-plane-is-up"><a class="header" href="#check-that-control-plane-is-up">Check that control plane is up</a></h2>
+<p>We now have a control plane node up and running. To check that everything is working, you can run the following command:</p>
+<pre><code class="language-bash">kubectl get nodes
+</code></pre>
+<p>You should see something like this:</p>
+<pre><code class="language-bash">NAME           STATUS      ROLES           AGE   VERSION
+controlplane   NotReady    control-plane   10m   v1.25.0
+</code></pre>
+<p>The control plane node should be in the <code>NotReady</code> state yet. This is normal, we will fix this in the next section.</p>
+<h2 id="install-cni-plugin"><a class="header" href="#install-cni-plugin">Install CNI plugin</a></h2>
+<p>The control plane node is not ready because the pods are not able to communicate with each other.</p>
+<p>If you run the following command:</p>
+<pre><code class="language-bash">kubectl get pods --all-namespaces
+</code></pre>
+<p>You will see something like this:</p>
+<pre><code class="language-bash">NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
+kube-system   coredns-74ff55c5b-2q2q2                    0/1     Pending   0          10m
+kube-system   coredns-74ff55c5b-4q4q4                    0/1     Pending   0          10m
+kube-system   etcd-controlplane                          1/1     Running   0          10m
+kube-system   kube-apiserver-controlplane                1/1     Running   0          10m
+kube-system   kube-controller-manager-controlplane       1/1     Running   0          10m
+kube-system   kube-proxy-2q2q2                           1/1     Running   0          10m
+kube-system   kube-scheduler-controlplane                1/1     Running   0          10m
+</code></pre>
+<p>You can see that the <code>coredns</code> pods are not ready and are in the <code>Pending</code> state. This is because the pods are waiting for a network to be available.</p>
+<p>To fix this, we need to install a <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/">Container Network Interface (CNI) plugin</a>. A CNI plugin is a network plugin that will allow pods to communicate with each other.</p>
+<p>We will use <a href="https://www.weave.works/oss/net/">Weave Net</a> in this course.</p>
+<pre><code class="language-bash">kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.2/manifests/calico.yaml
+</code></pre>
+<p>Wait for the weave-net pods to be ready:</p>
+<pre><code class="language-bash">kubectl -n kube-system wait pod -l k8s-app=calico-kube-controllers --for=condition=Ready --timeout=-1s
+kubectl get pods -l k8s-app=calico-kube-controllers -n kube-system
+</code></pre>
+<h2 id="check-that-control-plane-node-is-ready"><a class="header" href="#check-that-control-plane-node-is-ready">Check that control plane node is ready</a></h2>
+<p>To check that everything is working you can run the following command:</p>
+<pre><code class="language-bash">kubectl get nodes
+</code></pre>
+<p>You should see something like this:</p>
+<pre><code class="language-bash">NAME           STATUS   ROLES    AGE   VERSION
+controlplane   Ready    master   10m   v1.25.0
+</code></pre>
+<p>The control plane node should be in the <code>Ready</code> state now.</p>
+<p>We can also check that the <code>coredns</code> pod is now running:</p>
+<pre><code class="language-bash">kubectl get pods --all-namespaces
+</code></pre>
+<p>You should see something like this:</p>
+<pre><code class="language-bash">NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
+kube-system   coredns-74ff55c5b-2q2q2                    1/1     Running   0          10m
+kube-system   etcd-controlplane                          1/1     Running   0          10m
+kube-system   kube-apiserver-controlplane                1/1     Running   0          10m
+kube-system   kube-controller-manager-controlplane       1/1     Running   0          10m
+kube-system   kube-proxy-2q2q2                           1/1     Running   0          10m
+kube-system   kube-scheduler-controlplane                1/1     Running   0          10m
+</code></pre>
+<h2 id="join-worker-nodes"><a class="header" href="#join-worker-nodes">Join worker nodes</a></h2>
+<p>In the next section, we will make our worker nodes join the cluster.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../installation/installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../installation/worker-node.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../installation/installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../installation/worker-node.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
