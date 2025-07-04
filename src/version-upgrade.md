@@ -119,6 +119,26 @@ To upgrade the worker nodes the steps are similar to the control plane.
 
 First upgrade `kubeadm`
 
+Again first, we need to switch the Kubernetes package repository to the next minor version. To do this, we will edit the Kubernetes APT repository file.
+
+```bash
+sudo nano /etc/apt/sources.list.d/kubernetes.list
+```
+
+You should see a single line with the URL that contains your current Kubernetes minor version. For example, if you're using v1.32, you should see this:
+
+```bash
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /
+```
+
+Change the version in the URL to the next available minor release, for example:
+
+```bash
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /
+```
+
+Save the file and exit your text editor.
+
 ```bash
 sudo apt-mark unhold kubeadm && \
 sudo apt update && sudo apt remove -y kubeadm && sudo apt install -y kubeadm=1.33.2-1.1 && \
@@ -128,7 +148,7 @@ sudo apt-mark hold kubeadm
 Then upgrade the node
 
 ```bash
-kubeadm upgrade node
+sudo kubeadm upgrade node
 ```
 
 If the upgrade is successful, you should see the following output.
