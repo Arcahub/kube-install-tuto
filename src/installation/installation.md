@@ -63,7 +63,7 @@ Now we need to configure containerd to use the systemd cgroup driver.
 
 ```bash
 sudo mkdir -p /etc/containerd
-sudo containerd config default > /etc/containerd/config.toml
+sudo containerd config default | sudo tee /etc/containerd/config.toml
 ```
 
 Find the section `[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]` in the `/etc/containerd/config.toml` file and change the `SystemdCgroup` value to `true`.
@@ -81,9 +81,9 @@ sudo systemctl restart containerd
 To test the installation of containerd we can run the following command.
 
 ```bash
-ctr images pull docker.io/library/hello-world:latest
+sudo ctr images pull docker.io/library/hello-world:latest
 sudo ctr run --rm docker.io/library/hello-world:latest hello-world
-ctr images rm docker.io/library/hello-world:latest
+sudo ctr images rm docker.io/library/hello-world:latest
 ```
 
 If you see the following output, then the installation is successful.
@@ -99,17 +99,16 @@ To install kubeadm, kubelet and kubectl we will use ubuntu package manager (apt)
 
 ```bash
 # Install required packages for https repository
-sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 # Add Kubernetes’s official GPG key
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 # Add Kubernetes repository
-cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-deb https://apt.kubernetes.io/ kubernetes-xenial main
-EOF
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 # Update package manager index
 sudo apt-get update
 # Install kubeadm, kubelet and kubectl with the exact same version or else components could be incompatible
-sudo apt-get install -y kubelet=1.25.0-00 kubeadm=1.25.0-00 kubectl=1.25.0-00
+sudo apt-get install -y kubelet=1.32.0-00 kubeadm=1.32.0-00 kubectl=1.32.0-00
 # Hold the version of the packages
 sudo apt-mark hold kubelet kubeadm kubectl
 ```

@@ -11,7 +11,7 @@ kubectl -n kube-system get configmap coredns -o yaml | sed 's/cluster.local/inva
 kubectl delete pod -n kube-system -l k8s-app=kube-dns
 
 # Fix CoreDNS configuration
-kubectl -n kube-system get configmap coredns -o yaml | sed 's/invalid-domain/cluster.local/g' | kubectl apply -f -
+# kubectl -n kube-system get configmap coredns -o yaml | sed 's/invalid-domain/cluster.local/g' | kubectl apply -f -
 
 # Create a namespace for the exercise
 kubectl create namespace exercise-05
