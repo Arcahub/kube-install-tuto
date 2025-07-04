@@ -108,7 +108,7 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 # Update package manager index
 sudo apt-get update
 # Install kubeadm, kubelet and kubectl with the exact same version or else components could be incompatible
-sudo apt-get install -y kubelet=1.32.0-00 kubeadm=1.32.0-00 kubectl=1.32.0-00
+sudo apt-get install -y kubelet=1.32.6-1.1 kubeadm=1.32.6-1.1 kubectl=1.32.6-1.1
 # Hold the version of the packages
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
