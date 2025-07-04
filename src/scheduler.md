@@ -158,9 +158,6 @@ spec:
     - name: nginx
       image: nginx
     tolerations:
-    - key: node-role.kubernetes.io/master
-      operator: Equal
-      value: ""
     - key: node-role.kubernetes.io/control-plane
       operator: Equal
       value: ""

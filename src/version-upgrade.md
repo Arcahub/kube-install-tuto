@@ -8,16 +8,36 @@ To upgrade the control plane, we will use the `kubeadm upgrade` command. This co
 
 We will first upgrade `kubeadm` itself.
 
+We need to switch the Kubernetes package repository to the next minor version. To do this, we will edit the Kubernetes APT repository file.
+
+```bash
+sudo nano /etc/apt/sources.list.d/kubernetes.list
+```
+
+You should see a single line with the URL that contains your current Kubernetes minor version. For example, if you're using v1.32, you should see this:
+
+```bash
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /
+```
+
+Change the version in the URL to the next available minor release, for example:
+
+```bash
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /
+```
+
+Save the file and exit your text editor.
+
 ```bash
 sudo apt-mark unhold kubeadm && \
-sudo apt update && apt install -y kubeadm=1.33.0-00 && \
+sudo apt update && sudo apt remove -y kubeadm && sudo apt install -y kubeadm=1.33.2-1.1 && \
 sudo apt-mark hold kubeadm
 ```
 
 Now we can check if the upgrade is available.
 
 ```bash
-kubeadm upgrade plan
+sudo kubeadm upgrade plan
 ```
 
 If you see the following output then you can upgrade your cluster.
@@ -35,27 +55,27 @@ If you see the following output then you can upgrade your cluster.
 [upgrade/health] Checking Static Pod manifests directory is empty: The directory is not empty
 [upgrade/config] The configuration was checked to be correct:
 [upgrade/config]      COMPONENT                 CURRENT        AVAILABLE
-[upgrade/config]      API Server                v1.32.0        v1.33.0
-[upgrade/config]      Controller Manager        v1.32.0        v1.33.0
-[upgrade/config]      Scheduler                 v1.32.0        v1.33.0
-[upgrade/config]      Kube Proxy                v1.32.0        v1.33.0
+[upgrade/config]      API Server                v1.32.6        v1.33.2
+[upgrade/config]      Controller Manager        v1.32.6        v1.33.2
+[upgrade/config]      Scheduler                 v1.32.6        v1.33.2
+[upgrade/config]      Kube Proxy                v1.32.6        v1.33.2
 [upgrade/config]      CoreDNS                   1.8.0          1.8.0
 [upgrade/config]      Etcd                      3.4.13-0       3.4.13-0
-[upgrade/versions] Cluster version: v1.32.0
-[upgrade/versions] kubeadm version: v1.33.0
-[upgrade/versions] Latest stable version: v1.33.0
-[upgrade/versions] Latest version in the v1.32 series: v1.32.0
+[upgrade/versions] Cluster version: v1.32.6
+[upgrade/versions] kubeadm version: v1.33.2
+[upgrade/versions] Latest stable version: v1.33.2
+[upgrade/versions] Latest version in the v1.32 series: v1.32.6
 [upgrade/versions] Latest experimental version: v1.34.0-alpha.0
 
 Components that must be upgraded manually after you have upgraded the control plane with 'kubeadm upgrade apply':
 COMPONENT   CURRENT       AVAILABLE
-Kubelet     1 x v1.32.0   v1.33.0
+Kubelet     1 x v1.32.6   v1.33.2
 ```
 
 Now we can upgrade the cluster.
 
 ```bash
-kubeadm upgrade apply v1.33.0
+kubeadm upgrade apply v1.33.2
 ```
 
 If the upgrade is successful, you should see the following output.
@@ -76,7 +96,7 @@ You can now upgrade `kubelet`
 
 ```bash
 sudo apt-mark unhold kubelet && \
-sudo apt update && apt install -y kubelet=1.33.0-00 && \
+sudo apt update && sudo apt remove -y kubelet && sudo apt install -y kubelet=1.33.2-1.1 && \
 sudo apt-mark hold kubelet
 ```
 
@@ -101,7 +121,7 @@ First upgrade `kubeadm`
 
 ```bash
 sudo apt-mark unhold kubeadm && \
-sudo apt update && apt install -y kubeadm=1.33.0-00 && \
+sudo apt update && sudo apt remove -y kubeadm && sudo apt install -y kubeadm=1.33.2-1.1 && \
 sudo apt-mark hold kubeadm
 ```
 
@@ -127,7 +147,7 @@ You can now upgrade `kubelet`
 
 ```bash
 sudo apt-mark unhold kubelet && \
-sudo apt update && apt install -y kubelet=1.33.0-00 && \
+sudo apt update && sudo apt remove -y kubelet && sudo apt install -y kubelet=1.33.2-1.1 && \
 sudo apt-mark hold kubelet
 ```
 
@@ -156,7 +176,7 @@ You should see something like this:
 
 ```bash
 NAME            STATUS   ROLES                  AGE   VERSION
-controlplane    Ready    control-plane,master   10m   v1.33.0
-workernode      Ready    worker                 10m   v1.33.0
-workernode2     Ready    worker                 10m   v1.33.0
+controlplane    Ready    control-plane,master   10m   v1.33.2
+workernode      Ready    worker                 10m   v1.33.2
+workernode2     Ready    worker                 10m   v1.33.2
 ```
