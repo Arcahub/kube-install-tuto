@@ -81,14 +81,14 @@ To fix this, we need to install a [Container Network Interface (CNI) plugin](htt
 We will use [Weave Net](https://www.weave.works/oss/net/) in this course.
 
 ```bash
-kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.2/manifests/calico.yaml
 ```
 
 Wait for the weave-net pods to be ready:
 
 ```bash
-kubectl -n kube-system wait pod -l name=weave-net --for=condition=Ready --timeout=-1s
-kubectl get pods -l name=weave-net -n kube-system
+kubectl -n kube-system wait pod -l k8s-app=calico-kube-controllers --for=condition=Ready --timeout=-1s
+kubectl get pods -l k8s-app=calico-kube-controllers -n kube-system
 ```
 
 ## Check that control plane node is ready

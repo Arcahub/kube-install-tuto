@@ -4,7 +4,7 @@ In the last section we quickly saw that the scheduler assign the field `nodeName
 
 ## Manual scheduling
 
-We can manually schedule a pod by setting the `nodeName` field in the pod spec. But first to be sure that the `scheduler` won't do anythinh for us, we will remove the `scheduler` from the cluster:
+We can manually schedule a pod by setting the `nodeName` field in the pod spec. But first to be sure that the `scheduler` won't do anything for us, we will remove the `scheduler` from the cluster:
 
 ```bash
 sudo mv /etc/kubernetes/manifests/kube-scheduler.yaml /tmp

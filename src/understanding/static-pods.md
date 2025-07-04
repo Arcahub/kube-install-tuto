@@ -74,7 +74,7 @@ Let's restore the file :
 sudo mv ~/kube-apiserver.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
 ```
 
-And now, the `kube-apiserver` pod is back :
+And now, the `kube-apiserver` pod is back (it can take a few minutes to come back) :
 
 ```bash
 kubectl get pods --namespace=kube-system
